@@ -17,15 +17,34 @@ export class PaymentDetailFormComponent {
   onSubmit(form: NgForm) {
     this.service.formSubmitted = true;
     if (form.valid) {
-      this.service.postPaymentDetail().subscribe({
-        next: data => {
-          this.service.list = data as PaymentDetail[]
-          this.service.resetForm(form)
-          this.toastrService.success('Inserted Sucessfully', 'Payment Detail Register')
-        },
-        error: err => console.log(err)
-      })
+      if(this.service.formData.id == 0) {
+        this.insertRecord(form);
+      }
+      else {
+        this.updateRecord(form);
+      }
     }
+  }
+
+  insertRecord(form: NgForm) {
+    this.service.postPaymentDetail().subscribe({
+      next: data => {
+        this.service.list = data as PaymentDetail[]
+        this.service.resetForm(form)
+        this.toastrService.success('Inserted Sucessfully', 'Payment Detail Register')
+      },
+      error: err => console.log(err)
+    })
+  }
+  updateRecord(form: NgForm) {
+    this.service.putPaymentDetail().subscribe({
+      next: data => {
+        this.service.list = data as PaymentDetail[]
+        this.service.resetForm(form)
+        this.toastrService.info('Updated Sucessfully', 'Payment Detail Register')
+      },
+      error: err => console.log(err)
+    })
   }
 
 
